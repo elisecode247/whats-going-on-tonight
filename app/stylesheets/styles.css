@@ -1,0 +1,37 @@
+@keyframes spin
+  0%
+    transform: rotate(0deg)
+  100% 
+    transform: rotate(360deg)
+
+
+body
+  background-color: $color__black
+  color: $color__white
+footer
+  text-align: center
+
+.container
+  margin-bottom: 15px
+  text-align: center
+.page-header
+  border-color: $color__accent
+  text-align: center
+.btn-default
+  background-color: $color__primary
+  color: $color__white
+  border-color: $color__primary
+.media
+  text-align: left
+.media:hover
+  background-color: #222
+.media-object
+  width: 100px
+  height: auto
+.glyphicon-refresh
+  font-size: 50px
+  text-align: center
+  margin: auto
+  animation: spin 2s linear infinite;
+
+/*# sourceMappingURL=styles.css.map */

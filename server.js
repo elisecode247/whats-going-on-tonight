@@ -5,6 +5,8 @@ var routes = require('./app/routes/index.js');
 var mongoose = require('mongoose');
 var passport = require('passport');
 var session = require('express-session');
+var path = require('path');
+var pug = require('pug');
 
 var app = express();
 require('dotenv').load();
@@ -26,6 +28,8 @@ app.use(session({
 app.use(passport.initialize());
 app.use(passport.session());
 
+app.set('views', path.join(__dirname, 'app/views'));
+app.set('view engine', 'pug');
 routes(app, passport);
 
 var port = process.env.PORT || 8080;
