@@ -1,44 +1,45 @@
 'use strict';
 
 var path = process.cwd();
-var ClickHandler = require(path + '/app/controllers/clickHandler.server.js');
+var YelpHandler = require(path + '/app/controllers/yelpHandler.server.js');
 
 module.exports = function(app, passport) {
+	var yelpHandler = new YelpHandler();
 
 	function isLoggedIn(req, res, next) {
 		if (req.isAuthenticated()) {
-			return next();
+			req.loggedIn = true;
+			req.userId = req.user.github.id || req.user.twitter.id;
+			req.displayName = req.user.github.displayName || 
+				req.user.twitter.displayName;
 		}
 		else {
-			res.redirect('/login');
-		}
+			req.loggedIn = false;
+		};
+		return next();
 	}
 
-	var clickHandler = new ClickHandler();
-
 	app.route('/')
-		.get(function(req, res) {
-			res.render('index.pug');
-		});
-
-	app.route('/login')
-		.get(function(req, res) {
-			res.sendFile(path + '/public/login.html');
-		});
-
-	app.route('/logout')
-		.get(function(req, res) {
-			req.logout();
-			res.redirect('/login');
-		});
-
-	app.route('/profile')
 		.get(isLoggedIn, function(req, res) {
-			res.sendFile(path + '/public/profile.html');
+			res.render('index.pug', {
+				loggedIn: req.loggedIn,
+				displayName : req.displayName
+			});
 		});
+
+	app.get('/logout', function(req, res) {
+		req.logout();
+		res.redirect('/');
+	});
+	
+	app.route('/api/bar/:bar')
+		.post(isLoggedIn,yelpHandler.going);
+
+	app.route('/api/yelp/:place')
+		.get(isLoggedIn,yelpHandler.search);
 
 	app.route('/api/:id')
-		.get(isLoggedIn, function(req, res) {
+		.get(isLoggedIn, function (req, res) {
 			res.json(req.user.github);
 		});
 
@@ -47,12 +48,15 @@ module.exports = function(app, passport) {
 
 	app.route('/auth/github/callback')
 		.get(passport.authenticate('github', {
-			successRedirect: '/',
-			failureRedirect: '/login'
+			successRedirect: '/'
 		}));
 
-	app.route('/api/:id/clicks')
-		.get(isLoggedIn, clickHandler.getClicks)
-		.post(isLoggedIn, clickHandler.addClick)
-		.delete(isLoggedIn, clickHandler.resetClicks);
+	app.route('/auth/twitter')
+		.get(passport.authenticate('twitter'));
+
+	app.route('/auth/twitter/callback')
+		.get(passport.authenticate('twitter', {
+			successRedirect: '/'
+		}));
+
 };

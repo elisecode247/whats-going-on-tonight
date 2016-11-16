@@ -31,10 +31,12 @@
     "mongoose": "^4.1.0",
     "passport": "^0.3.0",
     "passport-github": "^1.0.0",
+    "passport-twitter": "^1.0.4",
     "path": "^0.12.7",
     "pug": "^2.0.0-beta6",
     "react": "^15.3.2",
-    "react-dom": "^15.3.2"
+    "react-dom": "^15.3.2",
+    "yelp": "^1.0.1"
   },
   "devDependencies": {
     "babel-cli": "^6.18.0",
@@ -56,6 +58,8 @@
     "gulp-util": "^3.0.7",
     "gulp-watch": "^4.3.10",
     "mocha": "^3.1.2",
+    "nodemon": "^1.11.0",
+    "reactify": "^1.1.1",
     "vinyl-buffer": "^1.0.0",
     "vinyl-source-stream": "^1.1.0",
     "watchify": "^3.7.0"

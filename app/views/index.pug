@@ -12,25 +12,40 @@ html
         link(rel="stylesheet", href="../../public/css/styles.css")
     body
         div.container
-          div.page-header
+          div.page-header.row
             h1 Plans tonight?
             p See which bars are hoppin' tonight and RSVP ahead of time!
             p Remember: take a cab and drink responsibly.
-            a.btn.btn-social.btn-twitter
-              span.fa.fa-twitter
-              | Sign in with Twitter
-          input.form-control.col-xs-12(placeholder="What city are you at?")
-          button.btn.btn-default.col-xs-12
-            i.glyphicon.glyphicon-search
+          if (loggedIn === false)  
+            div.row.buttons--sign-in
+              div.col-xs-12
+                a.btn.btn-social.btn-twitter(href="/auth/twitter")
+                  span.fa.fa-twitter
+                  | Sign in with Twitter
+              div.col-xs-12.buttons--sign-in
+                a.btn.btn-social.btn-github(href="/auth/github")
+                  span.fa.fa-github
+                  | Sign in with Github
+          else
+            div.row
+              div.col-xs-12.buttons--sign-in
+                | Hello, 
+                span(id="display-name", class="profile-value") #{displayName}
+                | !
+              div.col-xs-12.buttons--sign-in
+                a.button.btn.btn-default(href="/logout") Log Out
+          div.row
+            div.col-xs-12
+              input.form-control.input--search(placeholder="Which city are you at?")
         div#react-app.container
           i.glyphicon.glyphicon-refresh
         footer
           p 
             a.btn.btn-social.btn-github(href="https://github.com/elisecode247/whats-going-on-tonight")
               span.fa.fa-github
-              | view source code
+              | view source code 
         script(src="https://ajax.googleapis.com/ajax/libs/jquery/3.1.1/jquery.min.js")
         script(src="https://use.fontawesome.com/610b820b5f.js")
+        script(type='text/javascript', src='common/ajax-functions.js')
         script(src="../../public/js/source.min.js")
-        script(id="__bs_script__").
-            document.write("<script async src='http://HOST:8082/browser-sync/browser-sync-client.js?v=2.17.5'><\/script>".replace("HOST", location.hostname));
+        
