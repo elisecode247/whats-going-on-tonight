@@ -18,9 +18,6 @@
     "javascript",
     "boilerplate"
   ],
-  "scripts": {
-    "start": "node server.js"
-  },
   "author": "Elise Straub",
   "license": "MIT",
   "dependencies": {
