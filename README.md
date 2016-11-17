@@ -1,5 +1,5 @@
 ## Nightlife Coordination App
-Demo: pending heroku set up
+Demo: https://afternoon-atoll-50084.herokuapp.com/
 
 Project and user stories: https://www.freecodecamp.com/challenges/build-a-nightlife-coordination-app
 

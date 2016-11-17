@@ -14,7 +14,7 @@ function yelpHandler() {
         yelp.search({
                 term: 'bar',
                 location: req.params.place,
-                limit: 4
+                limit: 20
             })
             .then(function(data) {
                 let modifiedData = data.businesses;
