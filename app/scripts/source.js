@@ -4,6 +4,8 @@ const ReactDOM = require('react-dom');
 var searchButton = document.querySelector('.btn--search');
 const searchInput = document.querySelector('.input--search');
 
+var searchTerm = sessionStorage.getItem('searchTerm');
+
 $(searchInput).keyup(function(event) {
   if (event.keyCode == 13) {
     document.querySelector('.btn--search').click();
@@ -78,33 +80,46 @@ var SearchList = React.createClass({
     return {
       businesses: [],
       loggedIn: false,
-      searchWord: null
+      searchWord: searchTerm
     };
   },
+  componentDidMount: function() {
+        this.dataSource();
+    },
   dataSource: function(event) {
-    event.preventDefault();
-    if (!searchInput.value) {
-      alert('enter the name of a city');
-    } else if (searchInput.value === this.state.searchWord){
-      alert('you already entered this search term');
-    } else {
+    if (event){event.preventDefault();}
+    
+    if (!searchInput.value && !searchTerm){
+      return null;
+    } else if (!searchInput.value && searchTerm){
+      searchInput.value = searchTerm;
+    } else if (searchInput.value && !searchTerm){
+      sessionStorage.setItem('searchTerm', searchInput.value);
+      searchTerm = searchInput.value;
+    } else if (searchInput.value && searchTerm) {
+      if (searchInput.value === searchTerm){
+        alert('The search results are below.');
+        return null;
+      } else {
+        sessionStorage.setItem('searchTerm', searchInput.value);
+        searchTerm = searchInput.value;
+      }
+    }
       return $.ajax({
         type: 'get',
         dataType: 'json',
-        url: appUrl + '/api/yelp/' + searchInput.value
+        url: appUrl + '/api/yelp/' + searchTerm
       }).done(function(result) {
-        console.log(result);
         if (result.error){
           alert('enter a valid U.S. city');
         } else {
         this.setState({
           businesses: result.businesses,
           loggedIn: result.loggedIn,
-          searchWord: searchInput.value
+          searchWord: searchTerm
         });
       }
       }.bind(this));
-    }
   },
   going: function(bar, index){
     return function updateBarAttendance() {
@@ -147,7 +162,6 @@ var SearchList = React.createClass({
     );
   },
   render: function() {
-    if (this.state.businesses) {
       return (
         <div>
       <button type="button" 
@@ -160,14 +174,6 @@ var SearchList = React.createClass({
             </div>
         </div>);
     }
-    else {
-      return (<div>
-      <button type="button" className="btn btn-default btn--search" 
-      onClick={this.dataSource}>
-      <i className="glyphicon glyphicon-search"></i> Search </button>
-      </div>);
-    }
-  }
 });
 
 ReactDOM.render(
